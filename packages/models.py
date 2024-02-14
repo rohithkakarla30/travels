@@ -8,21 +8,21 @@ class Packages(models.Model):
         def get_queryset(self):
             return super().get_queryset().filter(start_date__gt=datetime.now())
     
-    package_id=models.AutoField(primary_key=True)
-    package_name = models.CharField(max_length=255)
+    id=models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
-    duration_in_days = models.IntegerField(null=False)
-    price_per_person = models.DecimalField(max_digits=10, decimal_places=2)
+    days = models.IntegerField(null=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField()
     end_date = models.DateField()
-    available_slots = models.IntegerField()
+    slots = models.IntegerField()
     creator=models.ForeignKey(User,related_name='package_admin',on_delete=models.PROTECT)
 
     objects=models.Manager()
     active_packages=PackagesObjects()
 
     def __str__(self):
-        return self.package_name
+        return self.name
     
 class Amenities(models.Model):
     name = models.CharField(max_length=255)
@@ -34,7 +34,7 @@ class Amenities(models.Model):
 
 
 def profile_image_path(instance, filename):
-    return f'places/{instance.package.package_name}/{filename}'
+    return f'places/{instance.package.name}/{filename}'
 
 class Places(models.Model):
     name = models.CharField(max_length=255)

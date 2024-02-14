@@ -5,13 +5,10 @@ from .models import User
 def custom_validation(data):
     email=data['email'].strip()
     password=data['password'].strip()
-    confirm_password=data['confirm_password'].strip()
     if not email or  User.objects.filter(email=email).exists():
         raise ValidationError('choose another email')
     if not password or len(password)<8:
         raise ValidationError('choose another password, minimum 8 charaters')
-    if password!=confirm_password:
-        raise ValidationError('confirm password in incorrect')
     return data
 
 def validate_email(data):

@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('',include(('users.urls','users'),namespace='users')),
+    path('api/',include(('users.urls','users'),namespace='users')),
     path('api/packages/',include(('packages.urls','packages'),namespace='packages')),
     #path('api/triprecords/',include(('TripRecords.urls','TripRecords'),namespace='triprecords')),
     path('auth/', include('rest_framework.urls'), name='rest_framework'),

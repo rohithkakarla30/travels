@@ -15,9 +15,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, filters
 from packages.models import Packages
 from django.contrib.auth import authenticate
-from .permissions import IsAthunticated_Obj
+from .permissions import IsAuthenticated_obj
 from rest_framework.parsers import MultiPartParser, FormParser
 from .jwt_token import GenerateUserTokens
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserRegister(APIView):
@@ -26,7 +27,7 @@ class UserRegister(APIView):
     def post(self,request):
         clean_data=custom_validation(request.data)
         clean_data=request.data
-        print(clean_data)
+        #print(clean_data)
         serializer= RegisterSerializer(data=clean_data)
         if serializer.is_valid(raise_exception=True):
             user=serializer.create(clean_data)
@@ -44,14 +45,17 @@ class Login(APIView):
         
         assert validate_email(data)
         assert validate_password(data)
-        
-        serializer = LoginSerializer(data=data)
         print(data)
+        serializer = LoginSerializer(data=data)
+        
         try:
+            
             if serializer.is_valid(raise_exception=True):
+                
                 user = authenticate(username=data['email'], password=data['password'])
+                print(user)
                 if user:
-                    login(user)
+                    print(user)
                     if user.is_superuser and kwargs.get('type') == 'admin':
                         
                         token = GenerateUserTokens().generate_user_tokens(user)
@@ -74,8 +78,23 @@ class Login(APIView):
         except Exception:
             return Response({'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class BlacklistTokenUpdateView(APIView):
+    permission_classes = [permissions.AllowAny,]
+    authentication_classes = ()
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 class ProfileUpdateView(APIView):
-    permissions_classes = [permissions.IsAuthenticated|permissions.IsAdminUser]
+    permissions_classes = [permissions.IsAuthenticated]
     parser_classes=[MultiPartParser,FormParser]
     serializer_class = ProfileSerializer
 
@@ -98,7 +117,7 @@ class ProfileUpdateView(APIView):
 class AddUserPackage(generics.CreateAPIView):
     #queryset = User_Packages.objects.all()
     serializer_class = UserPackagesSerializer
-    permission_classes = [IsAthunticated_Obj]
+    permission_classes = [IsAuthenticated_obj]
 
     def perform_create(self,serializer):
         package_id = self.kwargs['package']
@@ -110,16 +129,17 @@ class AddUserPackage(generics.CreateAPIView):
 
 class UserPackagesList(generics.ListAPIView):
     """purchased list by user"""
-    permission_classes = [IsAthunticated_Obj]
+    permission_classes = [IsAuthenticated_obj]
     serializer_class = UserPackagesSerializer
 
     def get_queryset(self):
         return self.request.user.deals.all()
 
 class UserPackageDestroy(generics.DestroyAPIView):
-    permission_class=[IsAthunticated_Obj]
-    serializer_class=UserPackagesSerializer
-    lookup_kwargs=['deal_id']
+    permission_classes = [IsAuthenticated_obj ]
+    serializer_class = UserPackagesSerializer
+    lookup_field = 'deal_id' 
+
     def get_queryset(self):
         return self.request.user.deals.all()
 
@@ -133,7 +153,7 @@ class UserPackageViewSet(viewsets.ViewSet):
     """
     A simple ViewSet for listing or retrieving users.
     """
-    permission_classes = (IsAthunticated_Obj,)
+    permission_classes = (IsAuthenticated_obj,)
     filter_backends=[filters.SearchFilter]
     search_fields=['^package_name']
     
@@ -174,9 +194,3 @@ class AllUserPackageViewSet(viewsets.ViewSet):
         user = get_object_or_404(self.queryset, pk=pk)
         serializer = ALLPackagesSerializer(user)
         return Response(serializer.data)
-         
-         
-    
-
-        
-    

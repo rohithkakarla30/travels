@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'TripRecords',
     'packages',
     'users',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -136,18 +137,19 @@ MEDIA_URL='/media/'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:3002"
 ]
 
 
 REST_FRAMEWORK={
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
     
-    #'DEFAULT_AUTHENTICATION_CLASSES': (
-    #    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     
-    #),
+    ),
 }
 #'DEFAULT_SCHEMA_CLASS': (
     #    'rest_framework.schemas.coreapi.AutoSchema'
@@ -164,7 +166,7 @@ SWAGGER_SETTINGS = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1,minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1,minutes=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,

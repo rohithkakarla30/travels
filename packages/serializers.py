@@ -14,17 +14,20 @@ class PlacesSerializer(serializers.ModelSerializer):
 #places=PlacesSerializer(many=True)
 #amenities=AmenitiesSerializer(many=True)
 class PackagesSerializer(serializers.ModelSerializer):
+    #places=PlacesSerializer(many=True)
+    #amenities=AmenitiesSerializer(many=True)
     class Meta:
         model=Packages
         fields=[
-            "package_id",
-            "package_name",
+            "id",
+            "name",
             "description",
-            "duration_in_days",
-            "price_per_person",
+            "days",
+            "price",
             "start_date",
             "end_date",
-            "available_slots",
+            "slots",
+
         ]
     #def create()
 
@@ -41,12 +44,23 @@ class BasicDetailPackageSerializer(serializers.ModelSerializer):
      )
     class Meta:
         model=Packages
-        fields=['package_id','package_name','description','start_date','end_date','amenities','places']
+        fields=['id','name','description','start_date','end_date','amenities','places']
 
 
 class CompletePackagesSerializer(serializers.ModelSerializer):
-    places=PlacesSerializer(many=True)
-    amenities=AmenitiesSerializer(many=True)
+    places=PlacesSerializer(many=False)
+    amenities=AmenitiesSerializer(many=False)
     class Meta:
         model=Packages
-        fields='__all__' 
+        fields=[
+            "id",
+            "name",
+            "description",
+            "days",
+            "price",
+            "start_date",
+            "end_date",
+            "slots",
+            "places",
+            "amenities"
+        ]

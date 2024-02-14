@@ -40,8 +40,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        usertype=('Admin' if self.is_superuser else 'User')
-        return f'{usertype} : {self.profile_obj.first_name}'
+        usertype=('Admin' if self.is_superuser else 'User') 
+        return f'{self.email}'
     class Meta:
         ordering=['is_superuser']
 

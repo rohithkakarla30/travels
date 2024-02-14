@@ -13,10 +13,10 @@ class PackagesListCreate(generics.ListCreateAPIView):
     """user read only Admin to read and write"""
     permission_classes = [IsAdminUser|ReadOnly]
     queryset=Packages.active_packages.all()
-    serializer_class=BasicDetailPackageSerializer
+    serializer_class=PackagesSerializer
     filter_backends=[filters.OrderingFilter,filters.SearchFilter]
-    search_fields= ['^package_name','^description']
-    ordering_fields=['start_date','end_date','package_name']
+    search_fields= ['^name','^description']
+    ordering_fields=['start_date','end_date','name']
     ordering=['start_date']
     
     def perform_create(self, serializer):
@@ -25,8 +25,8 @@ class PackagesListCreate(generics.ListCreateAPIView):
 class CompletePackageDetail(generics.RetrieveAPIView):
     #permission_classes = [IsAdminUser|ReadOnly]
     queryset = Packages.objects.all()
-    serializer_class =CompletePackagesSerializer
-    lookup_kwargs=['package_id']
+    serializer_class =PackagesSerializer(many=True)
+    #lookup_kwargs=['id']
 
 class PackagesDetail(generics.RetrieveUpdateDestroyAPIView):#PackageRetrieveUpdateDestroyAPIView
     permission_classes = [IsAdminUser|ReadOnly]
@@ -47,12 +47,12 @@ class AmenitiesList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         package_id = self.kwargs['package']
-        package = Packages.objects.filter(package_id=package_id).first()
+        package = Packages.objects.filter(id=package_id).first()
         return Amenities.objects.filter(package=package)
     
     def perform_create(self, serializer):
         package_id = self.kwargs['package']
-        package = Packages.objects.filter(package_id=package_id).first()
+        package = Packages.objects.filter(id=package_id).first()
         serializer.save(package=package)
 
 
@@ -76,12 +76,12 @@ class PlacesList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         package_id = self.kwargs['package']
-        package = Packages.objects.filter(package_id=package_id).first()
+        package = Packages.objects.filter(id=package_id).first()
         return Places.objects.filter(package=package)
     
     def perform_create(self, serializer):
         package_id = self.kwargs['package']
-        package = Packages.objects.filter(package_id=package_id).first()
+        package = Packages.objects.filter(id=package_id).first()
         serializer.save(package=package)
 
 
@@ -93,5 +93,5 @@ class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'place_id'
 
     def get_queryset(self):
-        package_id = self.kwargs['package']
-        return Places.objects.filter(package=package_id)
+        id = self.kwargs['package']
+        return Places.objects.filter(package=id)

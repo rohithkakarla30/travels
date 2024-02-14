@@ -1,7 +1,7 @@
 
-get  http://127.0.0.1:8000/user/127.0.0.1:8000/user/1 HTTP/1.1
+get  http://127.0.0.1:8000/api/packages/3 HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA3ODk2NzIzLCJpYXQiOjE3MDc4MDg1MjMsImp0aSI6ImE4OWVhYzZiZmY3MzRiYzFhNjk2OTU0ZDMwZDdmZDcyIiwidXNlcl9pZCI6MTN9.2mnLzibzVdMu3G9uYwUEb1pEff8m7wzEi_5sQxjN8bQ
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA3OTY2MDcwLCJpYXQiOjE3MDc4Nzk2MTAsImp0aSI6ImNhNWU1YTY5MTdkNTRkMWI4NTE5MDg1MDA2YjliM2JjIiwidXNlcl9pZCI6MTJ9.59fZMzg4_KjT8lLozDyBW3lArBqVsrxWnxjaFmJXNmA
 
 {
     "no_of_persons":4
@@ -9,39 +9,39 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ###
 
-POST  http://127.0.0.1:8000/register HTTP/1.1
+POST  http://127.0.0.1:8000/api/register HTTP/1.1
 content-type: application/json
 
 {
-    "email": "user4@gmail.com",
+    "email": "user5@gmail.com",
     "password": "user4@1234"
 }
 
 ###
 
-POST  http://127.0.0.1:8000/login/admin HTTP/1.1
+POST  http://127.0.0.1:8000/api/login/user HTTP/1.1
 content-type: application/json
 
 {
-    "email": "a8@admin.com",
-    "password": "admin@a8"
+    "email": "user5@gmail.com",
+    "password": "user4@1234"
 }
 
 ###
 
-POST  http://127.0.0.1:8000/login/user HTTP/1.1
+POST  http://127.0.0.1:8000/api/login/user HTTP/1.1
 content-type: application/json
 
 {
-    "email": "user@gmail.com",
-    "password": "user@1234"
+    "email": "user5@gmail.com",
+    "password": "user4@1234"
 }
 
-##
+###
 
-GET http://127.0.0.1:8000/profile HTTP/1.1
+GET http://127.0.0.1:8000/api/profile HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA3ODk2NzIzLCJpYXQiOjE3MDc4MDg1MjMsImp0aSI6ImE4OWVhYzZiZmY3MzRiYzFhNjk2OTU0ZDMwZDdmZDcyIiwidXNlcl9pZCI6MTN9.2mnLzibzVdMu3G9uYwUEb1pEff8m7wzEi_5sQxjN8bQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA3OTY4NzEyLCJpYXQiOjE3MDc4ODIyNTIsImp0aSI6ImMzMzI4YzZmZjVkODQ1OGJiZDUwMmRkOWExZDM0MjM4IiwidXNlcl9pZCI6MjN9.1j3EMS9razJYBRHwILt6nP9w3EYk1W4bMbvF-0BGedo
 
 {
 

@@ -11,7 +11,8 @@ from .views import (
     #UserPackagesList,
     AllUserPackageViewSet,
     #UserPackageDetail,
-    UserPackageDestroy
+    UserPackageDestroy,
+    BlacklistTokenUpdateView
 )
 from rest_framework import routers
 from rest_framework_simplejwt.views import (
@@ -25,14 +26,15 @@ router.register(r'alldeals',AllUserPackageViewSet,basename='alldeals')
 router.register(r'user/myjourneys',UserPackageViewSet,basename='profile')
 urlpatterns=[
     path('',include(router.urls)),
-    #path('login/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    #path('login/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('logout/blacklist/',BlacklistTokenUpdateView.as_view(),name='blacklist'),
     path('register',UserRegister.as_view(),name='register'),
     path('login/<str:type>',Login.as_view(),name='login'),
 	#path('logout/', UserLogout.as_view(), name='logout'),
     path('profile',ProfileUpdateView.as_view(),name='usersprofile'),
-    path('api/add_plan/<int:package>',AddUserPackage.as_view(),name='add_plan'),
-    path('api/remove_plan/<int:deal_id>',UserPackageDestroy.as_view(),name='delete_plan')
+    path('add_plan/<int:package>',AddUserPackage.as_view(),name='add_plan'),
+    path('remove_plan/<int:deal_id>',UserPackageDestroy.as_view(),name='delete_plan')
     #path('user/plan/<int:package>',UserPackageDetail.as_view(),'update_delete_plan')
     #path('user/myjourneys/', UserPackagesList.as_view(), name='user-packages-list-create'),
 ]
